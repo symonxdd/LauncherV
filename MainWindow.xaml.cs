@@ -1,4 +1,5 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using ModernWpf.Controls;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,6 +37,7 @@ namespace LauncherV
 
             UpdateInstallLabels();
             UpdateUIPathNotSet();
+            HandleFirstRun();
 
             if (IsInstallPathSet())
             {
@@ -58,6 +60,38 @@ namespace LauncherV
             }
         }
 
+        private async void HandleFirstRun()
+        {
+            const string STEAM_INSTALL_LOCATION = @"C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V";
+
+            if (!Properties.Settings.Default.FirstRun)
+                return;
+
+            if (IsValidPath(STEAM_INSTALL_LOCATION))
+            {
+                ContentDialog contentDialog = new ContentDialog()
+                {
+                    Title = "Detected GTA V install location (steam version)",
+                    Content = "Do you want this app to use this directory?",
+                    IsPrimaryButtonEnabled = true,
+                    DefaultButton = ContentDialogButton.Primary,
+                    PrimaryButtonText = "Yes",
+                    CloseButtonText = "No"
+                };
+                var result = await contentDialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    SetInstallPath(STEAM_INSTALL_LOCATION);
+                    UpdateInstallLabels();
+                    UpdateUIGameRunning();
+                    UpdateUIPathNotSet();
+                }
+            }
+
+            Properties.Settings.Default.FirstRun = false;
+            Properties.Settings.Default.Save();
+        }
+
         private string GetInstallPath() => Properties.Settings.Default.InstallPath;
 
         private bool IsInstallPathSet() => !string.IsNullOrEmpty(GetInstallPath());
@@ -70,7 +104,7 @@ namespace LauncherV
 
         private void SelectPathButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private bool IsValidPath(string path)
@@ -86,7 +120,7 @@ namespace LauncherV
                 selectInstallPathAppBarButton.Label = "Change GTA install location";
                 toggleModsToggleButton.IsEnabled = true;
                 openInstallPathAppBarButton.IsEnabled = true;
-                resetSettingsAppBarButton.IsEnabled = true;
+                //resetSettingsAppBarButton.IsEnabled = true;
                 launchGameButton.IsEnabled = true;
                 string toggleButtonText = Properties.Settings.Default.ModsEnabled ? "Disable" : "Enable";
                 toggleModsToggleButton.Content = toggleButtonText;
@@ -97,7 +131,7 @@ namespace LauncherV
                 selectInstallPathAppBarButton.Label = "Select GTA install location";
                 toggleModsToggleButton.IsEnabled = false;
                 openInstallPathAppBarButton.IsEnabled = false;
-                resetSettingsAppBarButton.IsEnabled = false;
+                //resetSettingsAppBarButton.IsEnabled = false;
                 launchGameButton.IsEnabled = false;
                 toggleModsToggleButton.Content = "Disable";
             }
@@ -121,7 +155,7 @@ namespace LauncherV
 
             if (files.Contains(GetInstallPath() + "\\dinput8.dll"))
             {
-                asiLoaderInstallStatusTextBlock.Text = "\u2714 ⭕";
+                asiLoaderInstallStatusTextBlock.Text = "\u2714";
                 asiLoaderInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
@@ -171,6 +205,8 @@ namespace LauncherV
             scriptHookVInstallStatusTextBlock.Text = "";
             scriptHookVDotNetInstallStatusTextBlock.Text = "";
             openIvInstallStatusTextBlock.Text = "";
+
+            //toolsStackPanel.Visibility = Visibility.Hidden;
         }
 
         private void UpdateUIGameRunning()
@@ -194,8 +230,8 @@ namespace LauncherV
         private void Window_Activated(object sender, EventArgs e)
         {
             UpdateInstallLabels();
-            UpdateUIPathNotSet();
             UpdateUIGameRunning();
+            UpdateUIPathNotSet();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -224,12 +260,27 @@ namespace LauncherV
             Properties.Settings.Default.Reset();
         }
 
-        private void ResetSettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void ResetSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ResetUserSettings();
-                MessageBox.Show("Reset successful.");
+                ContentDialog contentDialog = new ContentDialog()
+                {
+                    Title = "Confirmation",
+                    Content = "You're about to reset LauncherV\'s settings",
+                    IsPrimaryButtonEnabled = true,
+                    DefaultButton = ContentDialogButton.Primary,
+                    PrimaryButtonText = "Reset",
+                    CloseButtonText = "Dismiss"
+                };
+                var result = await contentDialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    ResetUserSettings();
+                    UpdateInstallLabels();
+                    UpdateUIPathNotSet();
+                    HandleFirstRun();
+                }
             }
             catch (Exception)
             {
@@ -282,16 +333,16 @@ namespace LauncherV
                 {
                     SetInstallPath(dialog.SelectedPath);
                     UpdateInstallLabels();
-                    UpdateUIPathNotSet();
                     UpdateUIGameRunning();
+                    UpdateUIPathNotSet();
                 }
                 else
                 {
                     MessageBox.Show(this, "GTA5.exe not found. Make sure you selected the right directory.\n\n" + "Selected Directory: " + dialog.SelectedPath, "Notice");
                 }
                 //if probblem, these were here before
-                //UpdateUIPathNotSet();
                 //UpdateUIGameRunning();
+                //UpdateUIPathNotSet();
             }
         }
 
