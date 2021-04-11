@@ -46,6 +46,15 @@ namespace LauncherV
                 //2. check above comment
                 //3. update btn ui accordingly
                 //4. based on toggle do shit
+
+
+                // HOW TO FILL IN THE TOOL STATS
+                // A) If tool not installed -> show "not installed"
+                // B) If tool installed     -> show whether enabled or disabled
+
+                // installed & enabled -> green check
+                // instaleld & disabled -> orange circle (1F7E0) (red: 2B55) (diff red: 1F534)
+                // not installed -> red cross
             }
         }
 
@@ -61,32 +70,7 @@ namespace LauncherV
 
         private void SelectPathButton_Click(object sender, RoutedEventArgs e)
         {
-            // Extremely nice (original) Windows folder browser achieved with Ookii Dialogs
-            // Github: https://github.com/ookii-dialogs/ookii-dialogs-wpf
-
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog
-            {
-                Description = "Select GTA V location",
-                UseDescriptionForTitle = true
-            };
-
-            if ((bool)dialog.ShowDialog(this))
-            {
-                if (IsValidPath(dialog.SelectedPath))
-                {
-                    SetInstallPath(dialog.SelectedPath);
-                    UpdateInstallLabels();
-                    UpdateUIPathNotSet();
-                    UpdateUIGameRunning();
-                }
-                else
-                {
-                    MessageBox.Show(this, "GTA5.exe not found. Make sure you selected the right directory.\n\n" + "Selected Directory: " + dialog.SelectedPath, "Notice");
-                }
-                //if probblem, these were here before
-                //UpdateUIPathNotSet();
-                //UpdateUIGameRunning();
-            }
+            
         }
 
         private bool IsValidPath(string path)
@@ -99,26 +83,22 @@ namespace LauncherV
             if (IsInstallPathSet())
             {
                 pathNotSetTextBlock.Text = "";
-                selectInstallPathButton.Content = "Change";
+                selectInstallPathAppBarButton.Label = "Change GTA install location";
                 toggleModsToggleButton.IsEnabled = true;
-                openInstallPathButton.IsEnabled = true;
-                settingsAppBarButton.IsEnabled = true;
+                openInstallPathAppBarButton.IsEnabled = true;
+                resetSettingsAppBarButton.IsEnabled = true;
                 launchGameButton.IsEnabled = true;
-                installStatusTextBlock.Visibility = Visibility.Visible;
-                openInstallPathButton.Visibility = Visibility.Visible;
                 string toggleButtonText = Properties.Settings.Default.ModsEnabled ? "Disable" : "Enable";
                 toggleModsToggleButton.Content = toggleButtonText;
             }
             else
             {
                 pathNotSetTextBlock.Text = "Please select your GTA V install location first";
-                selectInstallPathButton.Content = "Select";
+                selectInstallPathAppBarButton.Label = "Select GTA install location";
                 toggleModsToggleButton.IsEnabled = false;
-                openInstallPathButton.IsEnabled = false;
-                settingsAppBarButton.IsEnabled = false;
+                openInstallPathAppBarButton.IsEnabled = false;
+                resetSettingsAppBarButton.IsEnabled = false;
                 launchGameButton.IsEnabled = false;
-                installStatusTextBlock.Visibility = Visibility.Hidden;
-                openInstallPathButton.Visibility = Visibility.Hidden;
                 toggleModsToggleButton.Content = "Disable";
             }
         }
@@ -141,45 +121,45 @@ namespace LauncherV
 
             if (files.Contains(GetInstallPath() + "\\dinput8.dll"))
             {
-                asiLoaderInstallStatusTextBlock.Text = "\u2714 ASI Loader (dinput8.dll)";
+                asiLoaderInstallStatusTextBlock.Text = "\u2714 ⭕";
                 asiLoaderInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                asiLoaderInstallStatusTextBlock.Text = "\u274C ASI Loader (dinput8.dll)";
+                asiLoaderInstallStatusTextBlock.Text = "\u274C";
                 asiLoaderInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\ScriptHookV.dll"))
             {
-                scriptHookVInstallStatusTextBlock.Text = "\u2714 ScriptHookV (ScriptHookV.dll)";
+                scriptHookVInstallStatusTextBlock.Text = "\u2714";
                 scriptHookVInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                scriptHookVInstallStatusTextBlock.Text = "\u274C ScriptHookV (ScriptHookV.dll)";
+                scriptHookVInstallStatusTextBlock.Text = "\u274C";
                 scriptHookVInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\ScriptHookVDotNet.asi"))
             {
-                scriptHookVDotNetInstallStatusTextBlock.Text = "\u2714 ScriptHookVDotNet (ScriptHookVDotNet.asi)";
+                scriptHookVDotNetInstallStatusTextBlock.Text = "\u2714";
                 scriptHookVDotNetInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                scriptHookVDotNetInstallStatusTextBlock.Text = "\u274C ScriptHookVDotNet (ScriptHookVDotNet.asi)";
+                scriptHookVDotNetInstallStatusTextBlock.Text = "\u274C";
                 scriptHookVDotNetInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\OpenIV.asi"))
             {
-                openIvInstallStatusTextBlock.Text = "\u2714 OpenIV ASI Plugin (OpenIV.asi)";
+                openIvInstallStatusTextBlock.Text = "\u2714";
                 openIvInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                openIvInstallStatusTextBlock.Text = "\u274C OpenIV ASI Plugin (OpenIV.asi)";
+                openIvInstallStatusTextBlock.Text = "\u274C";
                 openIvInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
         }
@@ -239,17 +219,12 @@ namespace LauncherV
             }
         }
 
-        private void OpenInstallPathButton_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start(GetInstallPath());
-        }
-
         private void ResetUserSettings()
         {
             Properties.Settings.Default.Reset();
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void ResetSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -280,5 +255,49 @@ namespace LauncherV
             return Process.GetProcessesByName("GTA5").Length > 0;
         }
 
+        private void AboutAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("simple about me dialog");
+        }
+
+        private void ExitAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void SelectInstallPathAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Extremely nice (original) Windows folder browser achieved with Ookii Dialogs
+            // Github: https://github.com/ookii-dialogs/ookii-dialogs-wpf
+
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog
+            {
+                Description = "Select GTA V location",
+                UseDescriptionForTitle = true
+            };
+
+            if ((bool)dialog.ShowDialog(this))
+            {
+                if (IsValidPath(dialog.SelectedPath))
+                {
+                    SetInstallPath(dialog.SelectedPath);
+                    UpdateInstallLabels();
+                    UpdateUIPathNotSet();
+                    UpdateUIGameRunning();
+                }
+                else
+                {
+                    MessageBox.Show(this, "GTA5.exe not found. Make sure you selected the right directory.\n\n" + "Selected Directory: " + dialog.SelectedPath, "Notice");
+                }
+                //if probblem, these were here before
+                //UpdateUIPathNotSet();
+                //UpdateUIGameRunning();
+            }
+        }
+
+        private void OpenInstallPathAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(GetInstallPath());
+        }
     }
 }
