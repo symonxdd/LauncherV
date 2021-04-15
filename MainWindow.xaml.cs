@@ -48,15 +48,6 @@ namespace LauncherV
                 //2. check above comment
                 //3. update btn ui accordingly
                 //4. based on toggle do shit
-
-
-                // HOW TO FILL IN THE TOOL STATS
-                // A) If tool not installed -> show "not installed"
-                // B) If tool installed     -> show whether enabled or disabled
-
-                // installed & enabled -> green check
-                // instaleld & disabled -> orange circle (1F7E0) (red: 2B55) (diff red: 1F534)
-                // not installed -> red cross
             }
         }
 
@@ -104,7 +95,36 @@ namespace LauncherV
 
         private void SelectPathButton_Click(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
 
+=======
+            // Extremely nice (original) Windows folder browser achieved with Ookii Dialogs
+            // Github: https://github.com/ookii-dialogs/ookii-dialogs-wpf
+
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog
+            {
+                Description = "Select GTA V location",
+                UseDescriptionForTitle = true
+            };
+
+            if ((bool)dialog.ShowDialog(this))
+            {
+                if (IsValidPath(dialog.SelectedPath))
+                {
+                    SetInstallPath(dialog.SelectedPath);
+                    UpdateInstallLabels();
+                    UpdateUIPathNotSet();
+                    UpdateUIGameRunning();
+                }
+                else
+                {
+                    MessageBox.Show(this, "GTA5.exe not found. Make sure you selected the right directory.\n\n" + "Selected Directory: " + dialog.SelectedPath, "Notice");
+                }
+                //if probblem, these were here before
+                //UpdateUIPathNotSet();
+                //UpdateUIGameRunning();
+            }
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
         }
 
         private bool IsValidPath(string path)
@@ -117,22 +137,36 @@ namespace LauncherV
             if (IsInstallPathSet())
             {
                 pathNotSetTextBlock.Text = "";
-                selectInstallPathAppBarButton.Label = "Change GTA install location";
+                selectInstallPathButton.Content = "Change";
                 toggleModsToggleButton.IsEnabled = true;
+<<<<<<< HEAD
                 openInstallPathAppBarButton.IsEnabled = true;
                 //resetSettingsAppBarButton.IsEnabled = true;
+=======
+                openInstallPathButton.IsEnabled = true;
+                settingsAppBarButton.IsEnabled = true;
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
                 launchGameButton.IsEnabled = true;
+                installStatusTextBlock.Visibility = Visibility.Visible;
+                openInstallPathButton.Visibility = Visibility.Visible;
                 string toggleButtonText = Properties.Settings.Default.ModsEnabled ? "Disable" : "Enable";
                 toggleModsToggleButton.Content = toggleButtonText;
             }
             else
             {
                 pathNotSetTextBlock.Text = "Please select your GTA V install location first";
-                selectInstallPathAppBarButton.Label = "Select GTA install location";
+                selectInstallPathButton.Content = "Select";
                 toggleModsToggleButton.IsEnabled = false;
+<<<<<<< HEAD
                 openInstallPathAppBarButton.IsEnabled = false;
                 //resetSettingsAppBarButton.IsEnabled = false;
+=======
+                openInstallPathButton.IsEnabled = false;
+                settingsAppBarButton.IsEnabled = false;
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
                 launchGameButton.IsEnabled = false;
+                installStatusTextBlock.Visibility = Visibility.Hidden;
+                openInstallPathButton.Visibility = Visibility.Hidden;
                 toggleModsToggleButton.Content = "Disable";
             }
         }
@@ -155,45 +189,49 @@ namespace LauncherV
 
             if (files.Contains(GetInstallPath() + "\\dinput8.dll"))
             {
+<<<<<<< HEAD
                 asiLoaderInstallStatusTextBlock.Text = "\u2714";
+=======
+                asiLoaderInstallStatusTextBlock.Text = "\u2714 ASI Loader (dinput8.dll)";
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
                 asiLoaderInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                asiLoaderInstallStatusTextBlock.Text = "\u274C";
+                asiLoaderInstallStatusTextBlock.Text = "\u274C ASI Loader (dinput8.dll)";
                 asiLoaderInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\ScriptHookV.dll"))
             {
-                scriptHookVInstallStatusTextBlock.Text = "\u2714";
+                scriptHookVInstallStatusTextBlock.Text = "\u2714 ScriptHookV (ScriptHookV.dll)";
                 scriptHookVInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                scriptHookVInstallStatusTextBlock.Text = "\u274C";
+                scriptHookVInstallStatusTextBlock.Text = "\u274C ScriptHookV (ScriptHookV.dll)";
                 scriptHookVInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\ScriptHookVDotNet.asi"))
             {
-                scriptHookVDotNetInstallStatusTextBlock.Text = "\u2714";
+                scriptHookVDotNetInstallStatusTextBlock.Text = "\u2714 ScriptHookVDotNet (ScriptHookVDotNet.asi)";
                 scriptHookVDotNetInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                scriptHookVDotNetInstallStatusTextBlock.Text = "\u274C";
+                scriptHookVDotNetInstallStatusTextBlock.Text = "\u274C ScriptHookVDotNet (ScriptHookVDotNet.asi)";
                 scriptHookVDotNetInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
 
             if (files.Contains(GetInstallPath() + "\\OpenIV.asi"))
             {
-                openIvInstallStatusTextBlock.Text = "\u2714";
+                openIvInstallStatusTextBlock.Text = "\u2714 OpenIV ASI Plugin (OpenIV.asi)";
                 openIvInstallStatusTextBlock.Foreground = _greenSolidColorBrush;
             }
             else
             {
-                openIvInstallStatusTextBlock.Text = "\u274C";
+                openIvInstallStatusTextBlock.Text = "\u274C OpenIV ASI Plugin (OpenIV.asi)";
                 openIvInstallStatusTextBlock.Foreground = _redSolidColorBrush;
             }
         }
@@ -255,12 +293,21 @@ namespace LauncherV
             }
         }
 
+        private void OpenInstallPathButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(GetInstallPath());
+        }
+
         private void ResetUserSettings()
         {
             Properties.Settings.Default.Reset();
         }
 
+<<<<<<< HEAD
         private async void ResetSettingsButton_Click(object sender, RoutedEventArgs e)
+=======
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
         {
             try
             {
@@ -306,6 +353,7 @@ namespace LauncherV
             return Process.GetProcessesByName("GTA5").Length > 0;
         }
 
+<<<<<<< HEAD
         private void AboutAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("simple about me dialog");
@@ -350,5 +398,7 @@ namespace LauncherV
         {
             Process.Start(GetInstallPath());
         }
+=======
+>>>>>>> parent of 3d4c8be (Implemented row and column definitions)
     }
 }
