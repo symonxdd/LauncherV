@@ -9,7 +9,6 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         Activated="Window_Activated" Deactivated="Window_Deactivated">
-<<<<<<< HEAD
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="199*" />
@@ -25,15 +24,16 @@
         </Grid.RowDefinitions>
 
         <ui:CommandBar x:Name="PrimaryCommandBar" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Height="40">
-=======
-    <ui:SimpleStackPanel>
-        <ui:CommandBar x:Name="PrimaryCommandBar" Margin="750,0,0,0">
->>>>>>> parent of 3d4c8be (Implemented row and column definitions)
             <ui:CommandBar.SecondaryCommands>
-                <ui:AppBarButton x:Name="settingsAppBarButton" Icon="Setting" Label="Reset Settings" Click="SettingsButton_Click"/>
+                <ui:AppBarButton x:Name="selectInstallPathAppBarButton" Label="Select GTA install location" Click="SelectInstallPathAppBarButton_Click"/>
+                <ui:AppBarButton x:Name="openInstallPathAppBarButton" Label="Open" Click="OpenInstallPathAppBarButton_Click"/>
+                <ui:AppBarSeparator></ui:AppBarSeparator>
+                <ui:AppBarButton x:Name="resetSettingsAppBarButton" Label="Reset Settings" Click="ResetSettingsButton_Click"/>
+                <ui:AppBarButton x:Name="aboutAppBarButton" Label="About" Click="AboutAppBarButton_Click"/>
+                <ui:AppBarSeparator></ui:AppBarSeparator>
+                <ui:AppBarButton x:Name="exitAppBarButton" Label="Exit" Click="ExitAppBarButton_Click"/>
             </ui:CommandBar.SecondaryCommands>
         </ui:CommandBar>
-<<<<<<< HEAD
         <TextBlock Text="LauncherV" Style="{StaticResource HeaderTextBlockStyle}"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="70,37,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="61" />
         <StackPanel Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" Margin="15,0,15,15" Height="74">
             <ToggleButton x:Name="toggleModsToggleButton"  Height="32" HorizontalAlignment="Stretch" Content="Disable" Click="ToggleModsToggleButton_Click"  />
@@ -63,24 +63,4 @@
         </StackPanel>
     </Grid>
 
-=======
-        <TextBlock Text="LauncherV" Style="{StaticResource HeaderTextBlockStyle}" Margin="223,-4,337,3.026" />
-        <Button x:Name="selectInstallPathButton" HorizontalAlignment="Stretch" Content="Select" Margin="11,239,679,-239" Click="SelectPathButton_Click" />
-        <Button x:Name="openInstallPathButton" Content="Open" Margin="10,174,0,-174" Click="OpenInstallPathButton_Click"/>
-        <ToggleButton x:Name="toggleModsToggleButton" Margin="605,175,115,-194" Height="32" HorizontalAlignment="Stretch" Content="Disable" Click="ToggleModsToggleButton_Click"/>
-        <TextBlock x:Name="pathNotSetTextBlock" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" Text="&lt;path not set&gt;" VerticalAlignment="Top" Margin="115,168,0,-173" Padding="12,0,0,0" FontSize="14" Foreground="#FFBD1010"/>
-        <Image HorizontalAlignment="Left" Width="143" Height="143" VerticalAlignment="Top" Source="resources/logo.png" Margin="39,-161,0,0"/>
-        <GroupBox x:Name="installStatusGroupBox" Margin="223,-95,209,95">
-            <StackPanel>
-                <TextBlock x:Name="installStatusTextBlock" Padding="0,0,0,10" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"  FontSize="16" TextDecorations="{x:Null}"><Run Text="I"/><Run Text="nstall"/><Run Text=" "/><Run Text="S"/><Run Text="tatus"/></TextBlock>
-                <TextBlock x:Name="scriptHookVInstallStatusTextBlock" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Padding="10,0,0,0" ><Run Text="&lt;"/><Run Text="scripthookv"/><Run Text="&gt;"/></TextBlock>
-                <TextBlock x:Name="asiLoaderInstallStatusTextBlock" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Padding="10,0,0,0" ><Run Text="&lt;"/><Run Text="asi loader&gt;"/></TextBlock>
-                <TextBlock x:Name="scriptHookVDotNetInstallStatusTextBlock" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Padding="10,0,0,0" ><Run Text="&lt;"/><Run Text="scripthookv"/><Run Text="dotnet&gt;"/></TextBlock>
-                <TextBlock x:Name="openIvInstallStatusTextBlock" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Padding="10,0,0,0" ><Run Text="&lt;"/><Run Text="openiv"/><Run Text=" asi plugin&gt;"/></TextBlock>
-            </StackPanel>
-           
-        </GroupBox>
-        <Button x:Name="launchGameButton" HorizontalAlignment="Stretch" Style="{DynamicResource AccentButtonStyle}" Content="Launch GTA" Margin="684,-3,10,3" Click="LaunchGameButton_Click" />
-    </ui:SimpleStackPanel>
->>>>>>> parent of 3d4c8be (Implemented row and column definitions)
 </Window>
